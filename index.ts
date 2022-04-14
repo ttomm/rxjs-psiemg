@@ -3,7 +3,7 @@ import { take, catchError } from 'rxjs/operators';
 
 let subscription: Subscription;
 
-const observable = new Observable((subscriber) => {
+const observable = new Observable<string>((subscriber) => {
   subscriber.next('Pen');
   subscriber.next('Notebook');
   subscriber.error(new Error('Oh no, where is my pencil?'));
@@ -19,9 +19,6 @@ const observer: Observer<string> = {
 subscription = observable
   .pipe(
     take(3),
-    catchError((err) => {
-      console.warn(`Tap: ${err.message}`);
-      return of(err.message);
-    })
+    catchError((err) => of(err.message))
   )
   .subscribe(observer);
